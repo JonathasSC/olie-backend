@@ -21,4 +21,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     @Query("SELECT COALESCE(SUM(t.value), 0) FROM Transaction t WHERE t.user.id = :userId AND t.type = :type")
     BigDecimal sumValueByUserIdAndType(@Param("userId") UUID userId, @Param("type") TransactionType type);
 
+    @Query("SELECT COALESCE(SUM(t.value), 0) FROM Transaction t "
+            + "WHERE t.user.id = :userId AND t.category.id = :categoryId AND t.type = :type")
+    BigDecimal sumValueByUserIdAndCategoryIdAndType(
+            @Param("userId") UUID userId, @Param("categoryId") UUID categoryId, @Param("type") TransactionType type);
+
 }

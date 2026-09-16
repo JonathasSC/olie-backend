@@ -1,6 +1,5 @@
 package com.olie.api.controller;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -43,10 +42,6 @@ public class TaskController {
 
     @GetMapping
     public BoardResponse board(@AuthenticationPrincipal User user) {
-        // TODO: autenticação desativada temporariamente — user pode vir null, reavaliar quando reativar
-        if (user == null) {
-            return new BoardResponse(List.of(), List.of(), List.of());
-        }
         return listTasksUseCase.execute(user);
     }
 

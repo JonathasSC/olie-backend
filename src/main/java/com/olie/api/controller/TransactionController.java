@@ -1,6 +1,5 @@
 package com.olie.api.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,19 +41,11 @@ public class TransactionController {
 
     @GetMapping
     public List<TransactionResponse> list(@AuthenticationPrincipal User user) {
-        // TODO: autenticação desativada temporariamente — user pode vir null, reavaliar quando reativar
-        if (user == null) {
-            return List.of();
-        }
         return listTransactionsUseCase.execute(user);
     }
 
     @GetMapping("/balance")
     public BalanceResponse balance(@AuthenticationPrincipal User user) {
-        // TODO: autenticação desativada temporariamente — user pode vir null, reavaliar quando reativar
-        if (user == null) {
-            return new BalanceResponse(BigDecimal.ZERO);
-        }
         return getBalanceUseCase.execute(user);
     }
 

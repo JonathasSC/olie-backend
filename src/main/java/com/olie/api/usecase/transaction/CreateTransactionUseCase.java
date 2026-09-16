@@ -24,6 +24,7 @@ public class CreateTransactionUseCase {
         Transaction transaction = Transaction.builder()
                 .user(user)
                 .value(request.value())
+                .date(request.date())
                 .paymentMethod(request.paymentMethod())
                 .type(request.type())
                 .category(category)

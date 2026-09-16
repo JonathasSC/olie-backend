@@ -38,10 +38,6 @@ public class CategoryController {
 
     @GetMapping
     public List<CategoryResponse> list(@AuthenticationPrincipal User user) {
-        // TODO: autenticação desativada temporariamente — user pode vir null, reavaliar quando reativar
-        if (user == null) {
-            return List.of();
-        }
         return listCategoriesUseCase.execute(user);
     }
 

@@ -30,6 +30,7 @@ public class UpdateTransactionUseCase {
         Category category = resolveTransactionCategoryUseCase.execute(user, request.categoryId());
 
         transaction.setValue(request.value());
+        transaction.setDate(request.date());
         transaction.setPaymentMethod(request.paymentMethod());
         transaction.setType(request.type());
         transaction.setCategory(category);

@@ -22,9 +22,24 @@ spring:
       enabled: true
       lifecycle-management: start-and-stop
 
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: notification-websocket-relay
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.olie.api.notification
+
 jwt:
   secret: ${JWT_SECRET:change-this-super-secret-key-before-going-to-production-0123456789}
   expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
+
+notifications:
+  purchase-date-approaching-days: ${NOTIFICATIONS_PURCHASE_DATE_APPROACHING_DAYS:3}
 
 logging:
   level:
