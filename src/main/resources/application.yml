@@ -23,6 +23,7 @@ spring:
       lifecycle-management: start-and-stop
 
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -37,6 +38,9 @@ spring:
 jwt:
   secret: ${JWT_SECRET:change-this-super-secret-key-before-going-to-production-0123456789}
   expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:8123,http://localhost:3000,http://localhost:5173}
 
 notifications:
   purchase-date-approaching-days: ${NOTIFICATIONS_PURCHASE_DATE_APPROACHING_DAYS:3}

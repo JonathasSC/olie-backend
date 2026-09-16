@@ -64,6 +64,14 @@ Cria um novo usuário e já retorna um token de acesso.
 { "token": "eyJhbGciOi...", "tokenType": "Bearer" }
 ```
 
+### `POST /api/v1/auth/logout`
+
+Invalida o token atual (revogação server-side — o token deixa de funcionar mesmo antes de expirar naturalmente). Requer o header `Authorization` com o próprio token a ser invalidado.
+
+**Response**: `204 No Content`
+
+Chamar `/logout` sem header, ou com um token já expirado/revogado/inválido, retorna `401 Unauthorized`.
+
 ### Usando o token
 
 Em toda requisição autenticada, envie:
@@ -71,18 +79,19 @@ Em toda requisição autenticada, envie:
 Authorization: Bearer eyJhbGciOi...
 ```
 
-O token expira em **60 minutos** por padrão (`JWT_EXPIRATION_MINUTES`). Não há endpoint de refresh — ao expirar, é necessário logar novamente.
+O token expira em **60 minutos** por padrão (`JWT_EXPIRATION_MINUTES`). Não há endpoint de refresh — ao expirar (ou após logout), é necessário logar novamente.
 
 **Erros comuns**
 | Status | Quando ocorre |
 |---|---|
-| `401 Unauthorized` | token ausente, inválido ou expirado |
-| `400 Bad Request` | credenciais inválidas no login, ou payload de registro/validação inválido |
+| `401 Unauthorized` | token ausente, inválido, expirado ou revogado (pós-logout); também credenciais inválidas no login |
+| `400 Bad Request` | payload de registro/validação inválido (ex.: e-mail já cadastrado, senha curta) |
 
 ---
 
 ## Convenções gerais
 
+- **CORS**: a API libera CORS apenas para as origens configuradas em `CORS_ALLOWED_ORIGINS` (padrão local: `http://localhost:8123`, `http://localhost:3000`, `http://localhost:5173`). Se o frontend rodar em outra porta/host, peça para adicionar a origem nessa variável de ambiente.
 - **Escopo por usuário**: todo recurso (categorias, tasks, transações, itens planejados, metas, notas, notificações) pertence ao usuário autenticado. Tentar acessar/editar/excluir um recurso de outro usuário retorna `404 Not Found` (não `403`, para não vazar a existência do recurso).
 - **IDs**: todos os identificadores são UUID (string).
 - **Datas**:

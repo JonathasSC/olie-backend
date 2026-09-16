@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationEventProducer {
 
-    private final KafkaTemplate<String, NotificationEvent> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void publish(NotificationEvent event) {
         kafkaTemplate.send(NotificationTopics.PLANNED_ITEM_NOTIFICATIONS, event.userId().toString(), event);

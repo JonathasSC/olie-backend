@@ -5,11 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.olie.api.config.CorsProperties;
 import com.olie.api.notification.NotificationProperties;
 import com.olie.api.security.JwtProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({JwtProperties.class, NotificationProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, NotificationProperties.class, CorsProperties.class})
 @EnableScheduling
 public class BackendApplication {
 
