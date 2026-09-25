@@ -85,6 +85,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, ApiV1.PREFIX + "/auth/register", ApiV1.PREFIX + "/auth/login")
                         .permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        // exceções (404/400) são encaminhadas ao /error; sem isso viram 401
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authenticationEntryPoint()))
                 .authenticationProvider(authenticationProvider)

@@ -38,6 +38,10 @@ public class Notification {
     @JoinColumn(name = "planned_item_id")
     private PlannedItem plannedItem;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wear_item_id")
+    private WearItem wearItem;
+
     @Column(nullable = false, updatable = false)
     @Builder.Default
     private Instant sentAt = Instant.now();

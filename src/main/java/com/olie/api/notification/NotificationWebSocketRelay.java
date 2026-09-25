@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import com.olie.api.entity.Notification;
 import com.olie.api.entity.PlannedItem;
 import com.olie.api.entity.User;
+import com.olie.api.entity.WearItem;
 import com.olie.api.repository.NotificationRepository;
 import com.olie.api.repository.PlannedItemRepository;
 import com.olie.api.repository.UserRepository;
+import com.olie.api.repository.WearItemRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,7 @@ public class NotificationWebSocketRelay {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final PlannedItemRepository plannedItemRepository;
+    private final WearItemRepository wearItemRepository;
 
     @KafkaListener(topics = NotificationTopics.PLANNED_ITEM_NOTIFICATIONS, groupId = "notification-websocket-relay")
     public void relay(NotificationEvent event) {
@@ -34,12 +37,16 @@ public class NotificationWebSocketRelay {
         PlannedItem plannedItem = event.plannedItemId() != null
                 ? plannedItemRepository.findById(event.plannedItemId()).orElse(null)
                 : null;
+        WearItem wearItem = event.wearItemId() != null
+                ? wearItemRepository.findById(event.wearItemId()).orElse(null)
+                : null;
 
         Notification notification = Notification.builder()
                 .user(user)
                 .type(event.type())
                 .message(event.message())
                 .plannedItem(plannedItem)
+                .wearItem(wearItem)
                 .build();
 
         notificationRepository.save(notification);

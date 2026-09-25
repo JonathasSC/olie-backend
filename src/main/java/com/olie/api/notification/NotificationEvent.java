@@ -1,10 +1,12 @@
 package com.olie.api.notification;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import com.olie.api.entity.NotificationType;
 import com.olie.api.entity.PlannedItem;
+import com.olie.api.entity.WearItem;
 
 public record NotificationEvent(
         UUID id,
@@ -13,6 +15,7 @@ public record NotificationEvent(
         NotificationType type,
         String message,
         UUID plannedItemId,
+        UUID wearItemId,
         Instant createdAt) {
 
     public static NotificationEvent purchaseDateApproaching(PlannedItem plannedItem) {
@@ -27,6 +30,20 @@ public record NotificationEvent(
         return of(plannedItem, NotificationType.SUFFICIENT_BALANCE, message);
     }
 
+    public static NotificationEvent wearItemReplacementApproaching(WearItem wearItem, LocalDate replacementDate) {
+        String message = "O item \"%s\" está chegando ao fim da vida útil — troca estimada para %s."
+                .formatted(wearItem.getName(), replacementDate);
+        return new NotificationEvent(
+                UUID.randomUUID(),
+                wearItem.getUser().getId(),
+                wearItem.getUser().getEmail(),
+                NotificationType.WEAR_ITEM_REPLACEMENT_APPROACHING,
+                message,
+                null,
+                wearItem.getId(),
+                Instant.now());
+    }
+
     private static NotificationEvent of(PlannedItem plannedItem, NotificationType type, String message) {
         return new NotificationEvent(
                 UUID.randomUUID(),
@@ -35,6 +52,7 @@ public record NotificationEvent(
                 type,
                 message,
                 plannedItem.getId(),
+                null,
                 Instant.now());
     }
 }

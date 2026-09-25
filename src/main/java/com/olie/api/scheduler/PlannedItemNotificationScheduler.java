@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.olie.api.entity.PlannedItem;
 import com.olie.api.entity.TransactionType;
@@ -28,6 +29,7 @@ public class PlannedItemNotificationScheduler {
     private final NotificationProperties notificationProperties;
 
     @Scheduled(cron = "0 0 * * * *")
+    @Transactional
     public void checkPlannedItems() {
         checkApproachingDates();
         checkSufficientBalance();

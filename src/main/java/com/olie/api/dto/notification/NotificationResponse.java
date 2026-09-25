@@ -7,7 +7,7 @@ import com.olie.api.entity.Notification;
 import com.olie.api.entity.NotificationType;
 
 public record NotificationResponse(
-        UUID id, NotificationType type, String message, UUID plannedItemId, Instant sentAt) {
+        UUID id, NotificationType type, String message, UUID plannedItemId, UUID wearItemId, Instant sentAt) {
 
     public static NotificationResponse from(Notification notification) {
         return new NotificationResponse(
@@ -15,6 +15,7 @@ public record NotificationResponse(
                 notification.getType(),
                 notification.getMessage(),
                 notification.getPlannedItem() != null ? notification.getPlannedItem().getId() : null,
+                notification.getWearItem() != null ? notification.getWearItem().getId() : null,
                 notification.getSentAt());
     }
 }
