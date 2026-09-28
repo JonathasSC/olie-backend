@@ -6,11 +6,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.olie.api.config.CorsProperties;
+import com.olie.api.inquiry.InquiryProperties;
 import com.olie.api.notification.NotificationProperties;
 import com.olie.api.security.JwtProperties;
+import com.olie.api.whatsapp.WhatsAppProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({JwtProperties.class, NotificationProperties.class, CorsProperties.class})
+@EnableConfigurationProperties({
+        JwtProperties.class,
+        NotificationProperties.class,
+        CorsProperties.class,
+        WhatsAppProperties.class,
+        InquiryProperties.class})
 @EnableScheduling
 public class BackendApplication {
 

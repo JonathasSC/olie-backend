@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.olie.api.entity.NotificationType;
 import com.olie.api.entity.PlannedItem;
+import com.olie.api.entity.User;
 import com.olie.api.entity.WearItem;
 
 public record NotificationEvent(
@@ -42,6 +43,23 @@ public record NotificationEvent(
                 null,
                 wearItem.getId(),
                 Instant.now());
+    }
+
+    public static NotificationEvent whatsAppDisconnected(User user) {
+        String message = "Sua sessão do WhatsApp foi desconectada pelo celular. Conecte novamente para voltar a enviar consultas.";
+        return ofUser(user, NotificationType.WHATSAPP_DISCONNECTED, message);
+    }
+
+    public static NotificationEvent inquiryFinished(User user, long sent, long failed) {
+        String message = failed == 0
+                ? "Consulta concluída: %d contato(s) receberam a mensagem.".formatted(sent)
+                : "Consulta concluída: %d enviada(s) e %d com falha.".formatted(sent, failed);
+        return ofUser(user, NotificationType.INQUIRY_FINISHED, message);
+    }
+
+    private static NotificationEvent ofUser(User user, NotificationType type, String message) {
+        return new NotificationEvent(
+                UUID.randomUUID(), user.getId(), user.getEmail(), type, message, null, null, Instant.now());
     }
 
     private static NotificationEvent of(PlannedItem plannedItem, NotificationType type, String message) {

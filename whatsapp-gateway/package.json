@@ -1,0 +1,19 @@
+{
+  "name": "olie-whatsapp-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sidecar que conecta o Olie ao WhatsApp Web via Baileys",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "baileys": "^7.0.0-rc14",
+    "pino": "^10.3.1",
+    "qrcode": "^1.5.4"
+  }
+}

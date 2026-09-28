@@ -1,0 +1,3 @@
+node_modules/
+# sessões do WhatsApp contêm credenciais: nunca versionar
+data/

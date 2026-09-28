@@ -30,5 +30,25 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
 
+  # Sidecar do WhatsApp Web (Baileys). As sessões ficam só no volume local — nunca no repositório.
+  whatsapp-gateway:
+    build: ./whatsapp-gateway
+    ports:
+      # só a máquina local alcança o gateway; ele ainda exige o WHATSAPP_GATEWAY_TOKEN em toda chamada
+      - '127.0.0.1:3100:3100'
+    environment:
+      WHATSAPP_GATEWAY_TOKEN: '${WHATSAPP_GATEWAY_TOKEN:-change-this-gateway-token}'
+      OLIE_WEBHOOK_URL: '${OLIE_WEBHOOK_URL:-http://host.docker.internal:8090/internal/whatsapp/events}'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - 'olie-whatsapp-sessions:/data'
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3100/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   olie-postgres-data:
+  olie-whatsapp-sessions:

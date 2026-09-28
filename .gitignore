@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Olie: dados locais (fotos das consultas) — nunca versionar ###
+/data/

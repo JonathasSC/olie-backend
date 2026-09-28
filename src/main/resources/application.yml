@@ -17,6 +17,11 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+  servlet:
+    multipart:
+      max-file-size: ${INQUIRIES_PHOTO_MAX_UPLOAD_SIZE:10MB}
+      max-request-size: ${INQUIRIES_PHOTO_MAX_UPLOAD_SIZE:10MB}
+
   docker:
     compose:
       enabled: true
@@ -44,6 +49,36 @@ cors:
 
 notifications:
   purchase-date-approaching-days: ${NOTIFICATIONS_PURCHASE_DATE_APPROACHING_DAYS:3}
+
+whatsapp:
+  # gateway = sidecar whatsapp-gateway (WhatsApp Web via Baileys); simulated = nada é enviado
+  provider: ${WHATSAPP_PROVIDER:gateway}
+  gateway:
+    url: ${WHATSAPP_GATEWAY_URL:http://localhost:3100}
+    token: ${WHATSAPP_GATEWAY_TOKEN:change-this-gateway-token}
+    timeout: 30s
+
+# Limites conservadores de propósito: volume e ritmo são o que mais pesa para o WhatsApp bloquear o número.
+# O modelo da mensagem precisa manter as variáveis {saudacao}, {pergunta} e {itens}
+# (sobrescreva por variável de ambiente: INQUIRIES_MESSAGETEMPLATE).
+inquiries:
+  timezone: ${INQUIRIES_TIMEZONE:America/Sao_Paulo}
+  message-template: "{saudacao}! {pergunta}\n\n{itens}"
+  max-items: ${INQUIRIES_MAX_ITEMS:10}
+  max-recipients: ${INQUIRIES_MAX_RECIPIENTS:30}
+  contact-interval-min: ${INQUIRIES_CONTACT_INTERVAL_MIN:20s}
+  contact-interval-max: ${INQUIRIES_CONTACT_INTERVAL_MAX:60s}
+  message-interval: ${INQUIRIES_MESSAGE_INTERVAL:2s}
+  max-attempts: ${INQUIRIES_MAX_ATTEMPTS:3}
+  retry-delay: ${INQUIRIES_RETRY_DELAY:5s}
+  duplicate-window: ${INQUIRIES_DUPLICATE_WINDOW:7d}
+  simulation-interval: ${INQUIRIES_SIMULATION_INTERVAL:1s}
+  photos:
+    storage-dir: ${INQUIRIES_PHOTO_STORAGE_DIR:./data/inquiry-photos}
+    max-upload-size: ${INQUIRIES_PHOTO_MAX_UPLOAD_SIZE:10MB}
+    max-size: ${INQUIRIES_PHOTO_MAX_SIZE:1MB}
+    max-dimension: ${INQUIRIES_PHOTO_MAX_DIMENSION:1600}
+    orphan-retention: 1d
 
 logging:
   level:

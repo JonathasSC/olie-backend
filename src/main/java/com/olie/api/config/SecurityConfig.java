@@ -26,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.olie.api.controller.ApiV1;
 import com.olie.api.security.JwtAuthenticationFilter;
+import com.olie.api.whatsapp.WhatsAppWebhookController;
 
 import lombok.RequiredArgsConstructor;
 
@@ -87,6 +88,8 @@ public class SecurityConfig {
                         .requestMatchers("/ws/**").permitAll()
                         // exceções (404/400) são encaminhadas ao /error; sem isso viram 401
                         .requestMatchers("/error").permitAll()
+                        // autenticado pelo segredo compartilhado com o gateway, não por JWT
+                        .requestMatchers(HttpMethod.POST, WhatsAppWebhookController.PATH).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authenticationEntryPoint()))
                 .authenticationProvider(authenticationProvider)
